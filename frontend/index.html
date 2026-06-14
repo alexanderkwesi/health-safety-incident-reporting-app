@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>SafetyHub Incident Reporting</title>
+    <link rel="stylesheet" href="/assets/styles.css">
+</head>
+<body>
+    <div class="app-shell">
+        <aside class="sidebar">
+            <div>
+                <p class="eyebrow">SafetyHub</p>
+                <h1>Incident Reporting</h1>
+            </div>
+            <nav class="nav-list" aria-label="Primary">
+                <button class="nav-item is-active" data-view="dashboard">Dashboard</button>
+                <button class="nav-item" data-view="report">Report Incident</button>
+                <button class="nav-item" data-view="register">Incident Register</button>
+            </nav>
+            <a class="export-link" href="/api/export/incidents.csv">Export CSV</a>
+        </aside>
+
+        <main class="main">
+            <section class="toolbar">
+                <div>
+                    <p class="eyebrow">Construction health and safety</p>
+                    <h2 id="viewTitle">Operational Dashboard</h2>
+                </div>
+                <div class="filters">
+                    <input id="searchInput" type="search" placeholder="Search incidents">
+                    <select id="statusFilter" aria-label="Filter by status">
+                        <option value="">All statuses</option>
+                        <option value="open">Open</option>
+                        <option value="investigating">Investigating</option>
+                        <option value="action_required">Action required</option>
+                        <option value="closed">Closed</option>
+                    </select>
+                </div>
+            </section>
+
+            <section id="dashboardView" class="view">
+                <div class="metric-grid">
+                    <article class="metric">
+                        <span>Total incidents</span>
+                        <strong id="totalIncidents">0</strong>
+                    </article>
+                    <article class="metric">
+                        <span>Open incidents</span>
+                        <strong id="openIncidents">0</strong>
+                    </article>
+                    <article class="metric warning">
+                        <span>Critical incidents</span>
+                        <strong id="criticalIncidents">0</strong>
+                    </article>
+                    <article class="metric danger">
+                        <span>Overdue actions</span>
+                        <strong id="overdueActions">0</strong>
+                    </article>
+                </div>
+
+                <div class="content-grid">
+                    <section class="panel">
+                        <div class="panel-head">
+                            <h3>Recent Reports</h3>
+                            <button class="small-btn" data-view="register">View all</button>
+                        </div>
+                        <div id="recentIncidents" class="incident-list"></div>
+                    </section>
+                    <section class="panel">
+                        <h3>Status Breakdown</h3>
+                        <div id="statusBreakdown" class="breakdown"></div>
+                    </section>
+                </div>
+            </section>
+
+            <section id="reportView" class="view is-hidden">
+                <form id="incidentForm" class="panel form-panel">
+                    <div class="form-grid">
+                        <label>Title
+                            <input name="title" required minlength="3" placeholder="Short incident summary">
+                        </label>
+                        <label>Type
+                            <select name="incident_type" required>
+                                <option value="incident">Incident</option>
+                                <option value="near_miss">Near miss</option>
+                                <option value="hazard">Hazard</option>
+                                <option value="observation">Observation</option>
+                            </select>
+                        </label>
+                        <label>Severity
+                            <select name="severity" required>
+                                <option value="low">Low</option>
+                                <option value="medium">Medium</option>
+                                <option value="high">High</option>
+                                <option value="critical">Critical</option>
+                            </select>
+                        </label>
+                        <label>Location
+                            <input name="location" required placeholder="Site area or address">
+                        </label>
+                        <label>Reported by
+                            <input name="reported_by" required placeholder="Reporter name">
+                        </label>
+                        <label>Assigned to
+                            <input name="assigned_to" placeholder="Investigation owner">
+                        </label>
+                        <label>Occurred at
+                            <input name="occurred_at" type="datetime-local" required>
+                        </label>
+                    </div>
+                    <label>Description
+                        <textarea name="description" required minlength="10" rows="5" placeholder="What happened, who was involved, and what was observed?"></textarea>
+                    </label>
+                    <label>Immediate action
+                        <textarea name="immediate_action" rows="3" placeholder="Controls already put in place"></textarea>
+                    </label>
+                    <p id="formMessage" class="form-message" role="status"></p>
+                    <div class="form-actions">
+                        <button type="reset" class="secondary-btn">Clear</button>
+                        <button type="submit" class="primary-btn">Submit report</button>
+                    </div>
+                </form>
+            </section>
+
+            <section id="registerView" class="view is-hidden">
+                <div id="incidentRegister" class="incident-list"></div>
+            </section>
+        </main>
+    </div>
+
+    <dialog id="incidentDialog">
+        <form method="dialog" class="dialog-card">
+            <button class="close-btn" aria-label="Close">x</button>
+            <div id="incidentDetail"></div>
+        </form>
+    </dialog>
+
+    <script src="/assets/app.js"></script>
+</body>
+</html>
